@@ -1,6 +1,6 @@
 import requests
 import allure
-from endpoint import Endpoit
+from endpoints.endpoint import Endpoit
 
 
 class ApiAuthorize(Endpoit):
@@ -14,3 +14,5 @@ class ApiAuthorize(Endpoit):
         self.json = self.response.json()
         self.token = self.json['token']
         self.user = self.json['user']
+        self.headers = {"Authorization": self.token}
+        return self.headers, self.token, self.response

@@ -3,4 +3,5 @@ class Endpoit:
     response = None
     json = None
     headers = {'Content-Type': 'application/json'}
+    token = None
 

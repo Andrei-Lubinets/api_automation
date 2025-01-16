@@ -8,6 +8,6 @@ class ApiAuthorize(Endpoit):
     user = None
 
     @allure.step('Checking if the token is alive')
-    def token_is_alive(self, payload, headers=None, token):
+    def token_is_alive(self, token=None, headers=None):
         headers = headers if headers else self.headers
-        self.response = requests.post(f'{self.url}/authorize/{self.token}', json=payload, headers=None)
+        self.response = requests.get(f'{self.url}/authorize/{self.token}', headers=None)
