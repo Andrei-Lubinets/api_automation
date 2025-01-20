@@ -1,4 +1,5 @@
 import pytest
+import allure
 
 data_for_authorize = [{'name': 'Aladin'}, {'name': 'Patric'}, {'name': 'Alice'}]
 positive_data_for_create_memes = [{
@@ -65,34 +66,40 @@ data_for_change_meme = {
 }
 
 
+@allure.title('Authorize on the platform')
 @pytest.mark.parametrize('data', data_for_authorize)
 def test_make_authorization(create_authorize_endpoint, data):
     create_authorize_endpoint.make_authorization(payload=data)
     create_authorize_endpoint.check_that_status_is_200()
 
 
+@allure.title('Getting all the memes')
 def test_get_all_memes(create_get_endpoint, getting_a_headers):
     create_get_endpoint.show_all_memes(headers=getting_a_headers)
     create_get_endpoint.check_that_status_is_200()
 
 
+@allure.title('Getting one meme')
 def test_get_one_meme(create_get_endpoint, getting_a_headers):
     create_get_endpoint.show_one_meme(headers=getting_a_headers)
     create_get_endpoint.check_that_status_is_200()
     create_get_endpoint.check_that_text_is_correct("Only just begun the meme war has")
 
 
+@allure.title('Checking token validity')
 def test_is_life_a_token(check_authorize_endpoint, getting_a_token):
     check_authorize_endpoint.token_is_live(token=getting_a_token)
     check_authorize_endpoint.check_that_status_is_200()
 
 
+@allure.step('Create new meme')
 @pytest.mark.parametrize("data", positive_data_for_create_memes)
 def test_create_new_meme(create_post_endpoint, getting_a_headers, data):
     create_post_endpoint.add_new_meme(payload=data, headers=getting_a_headers)
     create_post_endpoint.check_that_status_is_200()
 
 
+@allure.title('Partial modification of data in the meme')
 def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_id):
     data_for_change_meme["id"] = getting_meme_id
     create_put_endpoint.change_meme(meme_id=getting_meme_id,
@@ -100,3 +107,9 @@ def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_i
                                     headers=getting_a_headers
                                     )
     create_put_endpoint.check_that_status_is_200()
+
+
+@allure.title('Delete meme')
+def test_delete_meme(create_delete_endpoint, getting_meme_id, getting_a_headers):
+    create_delete_endpoint.delete_meme(meme_id=getting_meme_id, headers=getting_a_headers)
+    create_delete_endpoint.check_that_status_is_200()
