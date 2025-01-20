@@ -4,7 +4,7 @@ from endpoints.api_authorize import ApiAuthorize
 from endpoints.api_post import ApiPost
 from endpoints.api_time_life_token import ApiLifeAuthorize
 from endpoints.api_put import ApiPut
-
+from endpoints.api_delete import ApiDelete
 
 
 @pytest.fixture()
@@ -30,6 +30,11 @@ def check_authorize_endpoint():
 @pytest.fixture()
 def create_put_endpoint():
     return ApiPut()
+
+
+@pytest.fixture()
+def create_delete_endpoint():
+    return ApiDelete()
 
 
 @pytest.fixture()

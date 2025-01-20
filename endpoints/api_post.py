@@ -1,3 +1,4 @@
+import allure
 import requests
 from endpoints.endpoint import Endpoit
 
@@ -5,6 +6,7 @@ from endpoints.endpoint import Endpoit
 class ApiPost(Endpoit):
     meme_id = None
 
+    @allure.step('Add new meme')
     def add_new_meme(self, payload, headers=None):
         headers = headers if headers else self.headers
         self.response = requests.post(f'{self.url}/meme', json=payload, headers=headers)
