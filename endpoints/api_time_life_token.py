@@ -1,13 +1,17 @@
 import requests
 import allure
-from endpoint import Endpoit
+from endpoints.endpoint import Endpoit
 
 
-class ApiAuthorize(Endpoit):
-    token = None
-    user = None
+class ApiLifeAuthorize(Endpoit):
 
     @allure.step('Checking if the token is alive')
-    def token_is_alive(self, token=None, headers=None):
-        headers = headers if headers else self.headers
-        self.response = requests.get(f'{self.url}/authorize/{self.token}', headers=None)
+    def token_is_live(self, token):
+        self.response = requests.get(f'{self.url}/authorize/{self.token}')
+        text = "Token is alive"
+        if text in self.response.text:
+            print("The token is valid")
+        else:
+            print("The token is invalid")
+        return self.response
+
