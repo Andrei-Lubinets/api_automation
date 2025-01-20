@@ -6,7 +6,7 @@ class Endpoit:
     response = None
     json = None
     headers = {'Content-Type': 'application/json'}
-    token = 'y3Rl7ENkvGmvkyM'
+
 
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):
