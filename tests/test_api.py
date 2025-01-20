@@ -1,5 +1,3 @@
-import json
-
 import pytest
 
 data_for_authorize = [{'name': 'Aladin'}, {'name': 'Patric'}, {'name': 'Alice'}]
@@ -97,5 +95,8 @@ def test_create_new_meme(create_post_endpoint, getting_a_headers, data):
 
 def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_id):
     data_for_change_meme["id"] = getting_meme_id
-    create_put_endpoint.change_meme(meme_id=getting_meme_id, payload=data_for_change_meme, headers=getting_a_headers)
+    create_put_endpoint.change_meme(meme_id=getting_meme_id,
+                                    payload=data_for_change_meme,
+                                    headers=getting_a_headers
+                                    )
     create_put_endpoint.check_that_status_is_200()
