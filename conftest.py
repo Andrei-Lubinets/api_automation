@@ -21,15 +21,20 @@ def create_new_meme():
 
 
 @pytest.fixture()
-def check_token_life():
+def check_life_the_token():
     return ApiLifeAuthorize()
+
+
+@pytest.fixture()
+def getting_a_headers(create_authorize_endpoint):
+    payload = {'name': 'Aladin'}
+    create_authorize_endpoint.make_authorization(payload)
+    yield create_authorize_endpoint.headers
 
 
 @pytest.fixture()
 def getting_a_token(create_authorize_endpoint):
     payload = {'name': 'Aladin'}
     create_authorize_endpoint.make_authorization(payload)
-    yield create_authorize_endpoint.headers
-
-
+    yield create_authorize_endpoint.token
 

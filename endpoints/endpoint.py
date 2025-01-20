@@ -6,14 +6,14 @@ class Endpoit:
     response = None
     json = None
     headers = {'Content-Type': 'application/json'}
-    token = None
+    token = 'y3Rl7ENkvGmvkyM'
 
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):
         assert self.response.status_code == 200
 
     @allure.step('Check that text is the same as sent')
-    def check_that_tittle_is_correct(self, text):
+    def check_that_text_is_correct(self, text):
         assert self.json['text'] == text
 
     @allure.step('Check that 400 error received')

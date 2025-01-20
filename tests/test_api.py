@@ -37,20 +37,11 @@ def test_make_authorization(create_authorize_endpoint, data):
 #     create_get_endpoint.check_that_status_is_200()
 
 
-def test_get_one_meme(create_get_endpoint, getting_a_token):
-    create_get_endpoint.show_one_meme(headers=getting_a_token)
+def test_get_one_meme(create_get_endpoint, getting_a_headers):
+    create_get_endpoint.show_one_meme(headers=getting_a_headers)
     create_get_endpoint.check_that_status_is_200()
-    create_get_endpoint.check_that_tittle_is_correct("Only just begun the meme war has")
-    print(getting_a_token)
+    create_get_endpoint.check_that_text_is_correct("Only just begun the meme war has")
 
 
-def test_is_alife_a_token(check_token_life, getting_a_token):
-    check_token_life.token_is_alive(headers=getting_a_token)
-    print(getting_a_token)
-
-#нужно посмотреть почему получаем 404 в ответе. Скорее всего что не подстовляется токен в запросе
-
-
-
-
-
+def test_is_life_a_token(check_life_the_token, getting_a_token):
+    check_life_the_token.token_is_live(token=getting_a_token)
