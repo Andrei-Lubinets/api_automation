@@ -17,4 +17,10 @@ class Endpoit:
 
     @allure.step('Check that 400 error received')
     def check_bad_request(self):
+        print(self.response.status_code)
         assert self.response.status_code == 400
+
+    @allure.step('Check that 401 error received')
+    def check_no_authorize_request(self):
+        print(self.response.status_code)
+        assert self.response.status_code == 401
