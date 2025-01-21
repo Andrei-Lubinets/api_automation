@@ -145,10 +145,10 @@ def test_create_new_meme_with_negative_data(create_post_endpoint, getting_a_head
 @allure.title('Complete modification of object data')
 def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_id):
     data_for_change_meme["id"] = getting_meme_id
-    create_put_endpoint.change_meme(meme_id=getting_meme_id,
-                                    payload=data_for_change_meme,
-                                    headers=getting_a_headers
-                                    )
+    create_put_endpoint.change_all_data_meme(meme_id=getting_meme_id,
+                                             payload=data_for_change_meme,
+                                             headers=getting_a_headers
+                                             )
     create_put_endpoint.check_that_status_is_200()
 
 
@@ -176,8 +176,8 @@ def test_delete_meme_by_unauthorized_user(create_delete_endpoint, getting_meme_i
 @allure.title('Partial modification of meme data')
 def test_change_meme_data_by_unused_method(create_patch_endpoint, getting_a_headers, getting_meme_id):
     data_for_unused_method['id'] = getting_meme_id
-    create_patch_endpoint.change_all_meme_data(meme_id=getting_meme_id,
-                                               payload=data_for_unused_method,
-                                               headers=getting_a_headers
-                                               )
+    create_patch_endpoint.change_meme_data(meme_id=getting_meme_id,
+                                           payload=data_for_unused_method,
+                                           headers=getting_a_headers
+                                           )
     create_patch_endpoint.check_method_not_allowed()

@@ -18,4 +18,3 @@ class ApiPost(Endpoit):
         except json.JSONDecodeError:
             self.json = None
         return self.response
-
