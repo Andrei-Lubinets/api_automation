@@ -9,6 +9,7 @@ class Endpoit:
 
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):
+        print(f"Status code {self.response.status_code}")
         assert self.response.status_code == 200
 
     @allure.step('Check that text is the same as sent')
@@ -17,10 +18,15 @@ class Endpoit:
 
     @allure.step('Check that 400 error received')
     def check_bad_request(self):
-        print(self.response.status_code)
+        print(f"Status code {self.response.status_code}")
         assert self.response.status_code == 400
 
     @allure.step('Check that 401 error received')
     def check_no_authorize_request(self):
-        print(self.response.status_code)
+        print(f"Status code {self.response.status_code}")
         assert self.response.status_code == 401
+
+    @allure.step('Check that 405 error received')
+    def check_method_not_allowed(self):
+        print(f"Status code {self.response.status_code}")
+        assert self.response.status_code == 405
