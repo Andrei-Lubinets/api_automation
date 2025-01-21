@@ -5,6 +5,7 @@ from endpoints.api_post import ApiPost
 from endpoints.api_time_life_token import ApiLifeAuthorize
 from endpoints.api_put import ApiPut
 from endpoints.api_delete import ApiDelete
+from endpoints.api_patch import ApiPatch
 
 
 @pytest.fixture()
@@ -38,8 +39,13 @@ def create_delete_endpoint():
 
 
 @pytest.fixture()
+def create_patch_endpoint():
+    return ApiPatch()
+
+
+@pytest.fixture()
 def getting_a_headers(create_authorize_endpoint):
-    payload = {'name': 'Batman'}
+    payload = {'name': 'Aladin'}
     create_authorize_endpoint.make_authorization(payload)
     yield create_authorize_endpoint.headers
 

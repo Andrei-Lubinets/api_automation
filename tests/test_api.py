@@ -14,11 +14,19 @@ positive_data_for_create_memes = [{"info": {"colors": ["brown", "grey", "yellow"
                                    "url": "https://i.imgflip.com/1yytwo.jpg"}
                                   ]
 
-data_for_change_meme = {"info": {"colors": ["brown", "gold", "black"], "objects": ["picture", "text"]},
-                        "tags": ["fun", "Leonardo DiCaprio", "Django Unchained"],
-                        "text": "When people ask me. Whats your favorite meme?",
-                        "url": "https://static1.srcdn.com/wordpress/wp-content/uploads/2020/08/Leonardo-DiCaprio"
-                               "-Django-Unchained-drinking-meme.jpg"}
+data_for_change_meme = {"info": {"colors": ["black", "white"], "objects": ["picture", "text", "human"]},
+                        "tags": ["really situation", "Nicolas"],
+                        "text": "You don`t say?",
+                        "url": "https://preview.redd.it/favorite-celebrity-memes-edits-that-never-fail-to-make-you-v0"
+                               "-72obmtpl7prb1.jpeg?width=894&format=pjpg&auto=webp&s"
+                               "=88f9ae5932382e50c8545ef12704fa02db904209"}
+
+data_for_unused_method = {"info": {"colors": ["brown", "gold", "black"], "objects": ["picture", "text"]},
+                          "tags": ["fun", "Leonardo DiCaprio", "Django Unchained"],
+                          "text": "When people ask me. Whats your favorite meme?",
+                          "url": "https://static1.srcdn.com/wordpress/wp-content/uploads/2020/08/Leonardo-DiCaprio"
+                                 "-Django-Unchained-drinking-meme.jpg"
+                          }
 
 negative_data_for_change_meme = [{"info": {"colors": ["brown", "gold", "black"], "objects": ["picture", "text"]},
                                   "tags": ["fun", "Leonardo DiCaprio", "Django Unchained"],
@@ -55,6 +63,7 @@ def test_make_authorization(create_authorize_endpoint, data):
     create_authorize_endpoint.check_that_status_is_200()
 
 
+@pytest.mark.negative
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Checking authorization with invalid values')
@@ -83,6 +92,7 @@ def test_get_one_meme(create_get_endpoint, getting_a_headers):
     create_get_endpoint.check_that_text_is_correct("Only just begun the meme war has")
 
 
+@pytest.mark.negative
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Getting one meme by unauthorized user')
@@ -91,6 +101,7 @@ def test_get_one_meme_by_unauthorized_user(create_get_endpoint):
     create_get_endpoint.check_no_authorize_request()
 
 
+@pytest.mark.negative
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Getting all memes by unauthorized user')
@@ -118,6 +129,7 @@ def test_create_new_meme(create_post_endpoint, getting_a_headers, data):
     create_post_endpoint.check_that_status_is_200()
 
 
+@pytest.mark.negative
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Create new meme with negative data')
@@ -130,7 +142,7 @@ def test_create_new_meme_with_negative_data(create_post_endpoint, getting_a_head
 @pytest.mark.smoke
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
-@allure.title('Partial modification of data in the meme')
+@allure.title('Complete modification of object data')
 def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_id):
     data_for_change_meme["id"] = getting_meme_id
     create_put_endpoint.change_meme(meme_id=getting_meme_id,
@@ -147,3 +159,25 @@ def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_i
 def test_delete_meme(create_delete_endpoint, getting_meme_id, getting_a_headers):
     create_delete_endpoint.delete_meme(meme_id=getting_meme_id, headers=getting_a_headers)
     create_delete_endpoint.check_that_status_is_200()
+
+
+@pytest.mark.smoke
+@allure.feature('Meme')
+@allure.story('Manipulate with meme')
+@allure.title('Delete meme by unauthorized user')
+def test_delete_meme_by_unauthorized_user(create_delete_endpoint, getting_meme_id):
+    create_delete_endpoint.delete_meme(meme_id=getting_meme_id)
+    create_delete_endpoint.check_no_authorize_request()
+
+
+@pytest.mark.negative
+@allure.feature('Meme')
+@allure.story('Manipulate with meme')
+@allure.title('Partial modification of meme data')
+def test_change_meme_data_by_unused_method(create_patch_endpoint, getting_a_headers, getting_meme_id):
+    data_for_unused_method['id'] = getting_meme_id
+    create_patch_endpoint.change_all_meme_data(meme_id=getting_meme_id,
+                                               payload=data_for_unused_method,
+                                               headers=getting_a_headers
+                                               )
+    create_patch_endpoint.check_method_not_allowed()
