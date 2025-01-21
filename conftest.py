@@ -39,7 +39,7 @@ def create_delete_endpoint():
 
 @pytest.fixture()
 def getting_a_headers(create_authorize_endpoint):
-    payload = {'name': 'Aladin'}
+    payload = {'name': 'Batman'}
     create_authorize_endpoint.make_authorization(payload)
     yield create_authorize_endpoint.headers
 

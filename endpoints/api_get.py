@@ -9,15 +9,21 @@ class ApiGet(Endpoit):
     @allure.step('Show all memes')
     def show_all_memes(self, headers=None):
         headers = headers if headers else self.headers
-        self.response = requests.get(f'{self.url}/meme', headers=headers)
-        self.json = self.response.json()
-        print(json.dumps(self.json, indent=4))
+        try:
+            self.response = requests.get(f'{self.url}/meme', headers=headers)
+            self.json = self.response.json()
+            print(json.dumps(self.json, indent=4))
+        except json.JSONDecodeError:
+            self.json = None
         return self.response
 
     @allure.step('Show one meme')
     def show_one_meme(self, headers=None):
         headers = headers if headers else self.headers
-        self.response = requests.get(f'{self.url}/meme/1', headers=headers)
-        self.json = self.response.json()
-        print(json.dumps(self.json, indent=4))
+        try:
+            self.response = requests.get(f'{self.url}/meme/1', headers=headers)
+            self.json = self.response.json()
+            print(json.dumps(self.json, indent=4))
+        except json.JSONDecodeError:
+            self.json = None
         return self.response
