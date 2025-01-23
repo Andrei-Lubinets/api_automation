@@ -9,8 +9,8 @@ from endpoints.api_patch import ApiPatch
 
 
 @pytest.fixture()
-def create_get_endpoint():
-    return ApiGet()
+def create_get_endpoint(getting_a_token):
+    return ApiGet(getting_a_token)
 
 
 @pytest.fixture()
@@ -19,8 +19,8 @@ def create_authorize_endpoint():
 
 
 @pytest.fixture()
-def create_post_endpoint():
-    return ApiPost()
+def create_post_endpoint(getting_a_token):
+    return ApiPost(getting_a_token)
 
 
 @pytest.fixture()
@@ -29,36 +29,31 @@ def check_authorize_endpoint():
 
 
 @pytest.fixture()
-def create_put_endpoint():
-    return ApiPut()
+def create_put_endpoint(getting_a_token):
+    return ApiPut(getting_a_token)
 
 
 @pytest.fixture()
-def create_delete_endpoint():
-    return ApiDelete()
+def create_delete_endpoint(getting_a_token):
+    return ApiDelete(getting_a_token)
 
 
 @pytest.fixture()
-def create_patch_endpoint():
-    return ApiPatch()
+def create_patch_endpoint(getting_a_token):
+    return ApiPatch(getting_a_token)
 
 
-@pytest.fixture()
-def getting_a_headers(create_authorize_endpoint):
+@pytest.fixture(scope='session')
+def getting_a_token():
     payload = {'name': 'Aladin'}
-    create_authorize_endpoint.make_authorization(payload)
-    yield create_authorize_endpoint.headers
-
-
-@pytest.fixture()
-def getting_a_token(create_authorize_endpoint):
-    payload = {'name': 'Aladin'}
+    create_authorize_endpoint = ApiAuthorize()
     create_authorize_endpoint.make_authorization(payload)
     yield create_authorize_endpoint.token
 
 
 @pytest.fixture()
-def getting_meme_id(create_post_endpoint, getting_a_headers):
+def getting_meme_id(create_post_endpoint, getting_a_token):
+    headers = {"Authorization": getting_a_token}
     data = {
         "info": {
             "colors": [
@@ -80,5 +75,5 @@ def getting_meme_id(create_post_endpoint, getting_a_headers):
         "url": "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_65c882eca25d3b73d1124b00_65c886239bb1c5686a10ecd1"
                "/scale_1200"
     }
-    create_post_endpoint.add_new_meme(payload=data, headers=getting_a_headers)
+    create_post_endpoint.add_new_meme(payload=data, headers=headers)
     yield create_post_endpoint.meme_id

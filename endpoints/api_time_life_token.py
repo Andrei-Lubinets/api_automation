@@ -14,4 +14,3 @@ class ApiLifeAuthorize(Endpoit):
         else:
             print("The token is invalid")
         return self.response
-

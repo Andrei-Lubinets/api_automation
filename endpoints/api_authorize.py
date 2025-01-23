@@ -20,5 +20,4 @@ class ApiAuthorize(Endpoit):
             self.headers = {"Authorization": self.token}
         except json.JSONDecodeError:
             self.json = None
-
-        return self.headers, self.token, self.response
+        return self.response

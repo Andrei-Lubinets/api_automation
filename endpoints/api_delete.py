@@ -4,6 +4,11 @@ from endpoints.endpoint import Endpoit
 
 
 class ApiDelete(Endpoit):
+
+    def __init__(self, token):
+        self.token = token
+        self.headers = {"Authorization": self.token}
+
     @allure.step('Delete meme')
     def delete_meme(self, meme_id, headers=None):
         headers = headers if headers else self.headers
@@ -12,3 +17,4 @@ class ApiDelete(Endpoit):
             print(f"Meme with id {meme_id} has been deleted")
         else:
             print(f"Meme with id {meme_id} not deleted")
+        return self.response
