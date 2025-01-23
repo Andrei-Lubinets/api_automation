@@ -1,6 +1,7 @@
 import pytest
 import allure
 
+headers_for_unauthorized_users = {"Authorization": "false"}
 positive_data_for_authorize = [{'name': 'Aladin'}, {'name': 'Patric'}, {'name': 'Alice'}]
 negative_data_for_authorize = [{'name': 000}, {'name': {123: 'str'}}, {'name': ['robin', 'jack']}]
 positive_data_for_create_memes = [{"info": {"colors": ["brown", "grey", "yellow"], "objects": ["picture", "text"]},
@@ -73,21 +74,21 @@ def test_negative_authorization(create_authorize_endpoint, negative_data):
     create_authorize_endpoint.check_bad_request()
 
 
+@pytest.mark.smoke
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
-@pytest.mark.smoke
 @allure.title('Getting all the memes')
-def test_get_all_memes(create_get_endpoint, getting_a_headers):
-    create_get_endpoint.show_all_memes(headers=getting_a_headers)
+def test_get_all_memes(create_get_endpoint):
+    create_get_endpoint.show_all_memes()
     create_get_endpoint.check_that_status_is_200()
 
 
+@pytest.mark.smoke
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
-@pytest.mark.smoke
 @allure.title('Getting one meme')
-def test_get_one_meme(create_get_endpoint, getting_a_headers):
-    create_get_endpoint.show_one_meme(headers=getting_a_headers)
+def test_get_one_meme(create_get_endpoint):
+    create_get_endpoint.show_one_meme()
     create_get_endpoint.check_that_status_is_200()
     create_get_endpoint.check_that_text_is_correct("Only just begun the meme war has")
 
@@ -97,7 +98,7 @@ def test_get_one_meme(create_get_endpoint, getting_a_headers):
 @allure.story('Manipulate with meme')
 @allure.title('Getting one meme by unauthorized user')
 def test_get_one_meme_by_unauthorized_user(create_get_endpoint):
-    create_get_endpoint.show_one_meme()
+    create_get_endpoint.show_one_meme(headers=headers_for_unauthorized_users)
     create_get_endpoint.check_no_authorize_request()
 
 
@@ -106,7 +107,7 @@ def test_get_one_meme_by_unauthorized_user(create_get_endpoint):
 @allure.story('Manipulate with meme')
 @allure.title('Getting all memes by unauthorized user')
 def test_get_all_memes_by_unauthorized_user(create_get_endpoint):
-    create_get_endpoint.show_all_memes()
+    create_get_endpoint.show_all_memes(headers=headers_for_unauthorized_users)
     create_get_endpoint.check_no_authorize_request()
 
 
@@ -124,8 +125,8 @@ def test_is_alife_a_token(check_authorize_endpoint, getting_a_token):
 @allure.story('Manipulate with meme')
 @allure.step('Create new meme')
 @pytest.mark.parametrize("data", positive_data_for_create_memes)
-def test_create_new_meme(create_post_endpoint, getting_a_headers, data):
-    create_post_endpoint.add_new_meme(payload=data, headers=getting_a_headers)
+def test_create_new_meme(create_post_endpoint, data):
+    create_post_endpoint.add_new_meme(payload=data)
     create_post_endpoint.check_that_status_is_200()
 
 
@@ -134,8 +135,8 @@ def test_create_new_meme(create_post_endpoint, getting_a_headers, data):
 @allure.story('Manipulate with meme')
 @allure.title('Create new meme with negative data')
 @pytest.mark.parametrize("negative_data", negative_data_for_change_meme)
-def test_create_new_meme_with_negative_data(create_post_endpoint, getting_a_headers, negative_data):
-    create_post_endpoint.add_new_meme(payload=negative_data, headers=getting_a_headers)
+def test_create_new_meme_with_negative_data(create_post_endpoint, negative_data):
+    create_post_endpoint.add_new_meme(payload=negative_data)
     create_post_endpoint.check_bad_request()
 
 
@@ -143,11 +144,10 @@ def test_create_new_meme_with_negative_data(create_post_endpoint, getting_a_head
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Complete modification of object data')
-def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_id):
+def test_change_meme_data(create_put_endpoint, getting_meme_id, getting_a_token):
     data_for_change_meme["id"] = getting_meme_id
     create_put_endpoint.change_all_data_meme(meme_id=getting_meme_id,
-                                             payload=data_for_change_meme,
-                                             headers=getting_a_headers
+                                             payload=data_for_change_meme
                                              )
     create_put_endpoint.check_that_status_is_200()
 
@@ -156,8 +156,8 @@ def test_change_meme_data(create_put_endpoint, getting_a_headers, getting_meme_i
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Delete meme')
-def test_delete_meme(create_delete_endpoint, getting_meme_id, getting_a_headers):
-    create_delete_endpoint.delete_meme(meme_id=getting_meme_id, headers=getting_a_headers)
+def test_delete_meme(create_delete_endpoint, getting_meme_id):
+    create_delete_endpoint.delete_meme(meme_id=getting_meme_id)
     create_delete_endpoint.check_that_status_is_200()
 
 
@@ -166,7 +166,7 @@ def test_delete_meme(create_delete_endpoint, getting_meme_id, getting_a_headers)
 @allure.story('Manipulate with meme')
 @allure.title('Delete meme by unauthorized user')
 def test_delete_meme_by_unauthorized_user(create_delete_endpoint, getting_meme_id):
-    create_delete_endpoint.delete_meme(meme_id=getting_meme_id)
+    create_delete_endpoint.delete_meme(meme_id=getting_meme_id, headers=headers_for_unauthorized_users)
     create_delete_endpoint.check_no_authorize_request()
 
 
@@ -174,10 +174,9 @@ def test_delete_meme_by_unauthorized_user(create_delete_endpoint, getting_meme_i
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Partial modification of meme data')
-def test_change_meme_data_by_unused_method(create_patch_endpoint, getting_a_headers, getting_meme_id):
+def test_change_meme_data_by_unused_method(create_patch_endpoint, getting_meme_id):
     data_for_unused_method['id'] = getting_meme_id
     create_patch_endpoint.change_meme_data(meme_id=getting_meme_id,
-                                           payload=data_for_unused_method,
-                                           headers=getting_a_headers
+                                           payload=data_for_unused_method
                                            )
     create_patch_endpoint.check_method_not_allowed()

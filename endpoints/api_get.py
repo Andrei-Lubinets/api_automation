@@ -5,6 +5,9 @@ from endpoints.endpoint import Endpoit
 
 
 class ApiGet(Endpoit):
+    def __init__(self, token):
+        self.token = token
+        self.headers = {"Authorization": self.token}
 
     @allure.step('Show all memes')
     def show_all_memes(self, headers=None):

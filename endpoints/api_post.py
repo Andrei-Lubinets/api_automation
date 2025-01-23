@@ -6,6 +6,9 @@ from endpoints.endpoint import Endpoit
 
 
 class ApiPost(Endpoit):
+    def __init__(self, token):
+        self.token = token
+        self.headers = {"Authorization": self.token}
     meme_id = None
 
     @allure.step('Add new meme')
