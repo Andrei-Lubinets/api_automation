@@ -2,7 +2,7 @@ import pytest
 import allure
 
 headers_for_unauthorized_users = {"Authorization": "false"}
-positive_data_for_authorize = [{"name": "Aladin"}, {"name": "Patric"}, {"name": "Alice"}]
+positive_data_for_authorize = {"name": "Batman"}
 negative_data_for_authorize = [{"name": 000}, {"name": {123: "str"}}, {"name": ["robin", "jack"]}]
 positive_data_for_create_meme = {"info": {"colors": ["brown", "grey", "yellow"], "objects": ["picture", "text"]},
                                  "tags": ["fun", "little girl", "fire", "spider"],
@@ -53,10 +53,10 @@ negative_data_for_create_meme = [{"info": {"colors": ["brown", "gold", "black"],
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Authorize on the platform')
-@pytest.mark.parametrize('data', positive_data_for_authorize)
-def test_make_authorization(create_authorize_endpoint, data):
-    create_authorize_endpoint.make_authorization(payload=data)
+def test_make_authorization(create_authorize_endpoint):
+    create_authorize_endpoint.make_authorization(payload=positive_data_for_authorize)
     create_authorize_endpoint.check_that_status_is_200()
+    create_authorize_endpoint.check_that_user_is_correct('Batman')
 
 
 @pytest.mark.negative

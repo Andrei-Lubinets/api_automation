@@ -8,7 +8,6 @@ class Endpoint:
     headers = {'Content-Type': 'application/json'}
     meme_id = None
 
-
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):
         print(f"Status code {self.response.status_code}")
@@ -48,3 +47,7 @@ class Endpoint:
     def check_method_not_allowed(self):
         print(f"Status code {self.response.status_code}")
         assert self.response.status_code == 405
+
+    @allure.step('Check that user is the same as sent')
+    def check_that_user_is_correct(self, user):
+        assert self.json['user'] == user
