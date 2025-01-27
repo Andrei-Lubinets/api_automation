@@ -8,14 +8,16 @@ positive_data_for_create_meme = {"info": {"colors": ["brown", "grey", "yellow"],
                                  "tags": ["fun", "little girl", "fire", "spider"],
                                  "text": "There was a spider. It`s gone now.",
                                  "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn"
-                                        ":ANd9GcS20iBpZlg_uZLSnBh8tVZFJvh-JPlYOZe1Hw&s"}
+                                        ":ANd9GcS20iBpZlg_uZLSnBh8tVZFJvh-JPlYOZe1Hw&s"
+                                 }
 
 data_for_change_meme = {"info": {"colors": ["black", "white"], "objects": ["picture", "text", "human"]},
                         "tags": ["really situation", "Nicolas"],
                         "text": "You don`t say?",
                         "url": "https://preview.redd.it/favorite-celebrity-memes-edits-that-never-fail-to-make-you-v0"
                                "-72obmtpl7prb1.jpeg?width=894&format=pjpg&auto=webp&s"
-                               "=88f9ae5932382e50c8545ef12704fa02db904209"}
+                               "=88f9ae5932382e50c8545ef12704fa02db904209"
+                        }
 
 data_for_unused_method = {"info": {"colors": ["brown", "gold", "black"]},
                           "tags": ["fun", "Leonardo DiCaprio"],
