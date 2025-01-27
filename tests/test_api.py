@@ -185,10 +185,9 @@ def test_delete_meme_by_unauthorized_user(create_delete_endpoint, getting_meme_i
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Meme deletion by non-owner')
-def test_delete_meme_by_another_user(create_delete_endpoint, create_post_endpoint, create_authorize_endpoint,
-                                     getting_meme_id):
+def test_delete_meme_by_another_user(create_delete_endpoint, create_authorize_endpoint, getting_meme_id):
     create_authorize_endpoint.make_authorization(payload=authorization_data_for_delete_meme_another_user)
-    create_delete_endpoint.delete_meme(meme_id=create_post_endpoint.meme_id,
+    create_delete_endpoint.delete_meme(meme_id=getting_meme_id,
                                        headers=headers_for_delete_meme_another_user
                                        )
     create_delete_endpoint.check_that_status_is_forbidden_403()
