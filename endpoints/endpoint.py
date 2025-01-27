@@ -43,6 +43,11 @@ class Endpoint:
         print(f"Status code {self.response.status_code}")
         assert self.response.status_code == 401
 
+    @allure.step('Check that response is 403')
+    def check_that_status_is_forbidden_403(self):
+        print(f"Status code {self.response.status_code}")
+        assert self.response.status_code == 403
+
     @allure.step('Check that 405 error received')
     def check_method_not_allowed(self):
         print(f"Status code {self.response.status_code}")
