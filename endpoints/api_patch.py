@@ -1,10 +1,10 @@
 import allure
 import requests
 import json
-from endpoints.endpoint import Endpoit
+from endpoints.endpoint import Endpoint
 
 
-class ApiPatch(Endpoit):
+class ApiPatch(Endpoint):
     def __init__(self, token):
         self.token = token
         self.headers = {"Authorization": self.token}
