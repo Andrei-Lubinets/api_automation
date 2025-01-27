@@ -6,6 +6,7 @@ class Endpoit:
     response = None
     json = None
     headers = {'Content-Type': 'application/json'}
+    meme_id = None
 
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):
@@ -15,6 +16,22 @@ class Endpoit:
     @allure.step('Check that text is the same as sent')
     def check_that_text_is_correct(self, text):
         assert self.json['text'] == text
+
+    @allure.step('Check that colors is the same as sent')
+    def check_that_colors_is_correct(self, colors):
+        assert self.json['info']['colors'] == colors
+
+    @allure.step('Check that objects is the same as sent')
+    def check_that_objects_is_correct(self, objects):
+        assert self.json['info']['objects'] == objects
+
+    @allure.step('Check that tags is the same as sent')
+    def check_that_tags_is_correct(self, tags):
+        assert self.json['tags'] == tags
+
+    @allure.step('Check that url is the same as sent')
+    def check_that_url_is_correct(self, url):
+        assert self.json['url'] == url
 
     @allure.step('Check that 400 error received')
     def check_bad_request(self):

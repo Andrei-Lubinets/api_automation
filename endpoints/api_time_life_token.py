@@ -1,3 +1,5 @@
+import json
+
 import requests
 import allure
 from endpoints.endpoint import Endpoit
@@ -12,5 +14,5 @@ class ApiLifeAuthorize(Endpoit):
         if text in self.response.text:
             print("The token is valid")
         else:
-            print("The token is invalid")
+            self.response = requests.get(f'{self.url}/authorize/{token}')
         return self.response
