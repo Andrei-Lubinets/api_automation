@@ -8,6 +8,7 @@ class ApiPut(Endpoit):
     def __init__(self, token):
         self.token = token
         self.headers = {"Authorization": self.token}
+
     @allure.step('Complete modification of object data')
     def change_all_data_meme(self, meme_id, payload, headers=None):
         headers = headers if headers else self.headers

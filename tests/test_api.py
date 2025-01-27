@@ -2,18 +2,13 @@ import pytest
 import allure
 
 headers_for_unauthorized_users = {"Authorization": "false"}
-positive_data_for_authorize = [{'name': 'Aladin'}, {'name': 'Patric'}, {'name': 'Alice'}]
-negative_data_for_authorize = [{'name': 000}, {'name': {123: 'str'}}, {'name': ['robin', 'jack']}]
-positive_data_for_create_memes = [{"info": {"colors": ["brown", "grey", "yellow"], "objects": ["picture", "text"]},
-                                   "tags": ["fun", "little girl", "fire", "spider"],
-                                   "text": "There was a spider. It`s gone now.",
-                                   "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn"
-                                          ":ANd9GcS20iBpZlg_uZLSnBh8tVZFJvh-JPlYOZe1Hw&s"},
-                                  {"info": {"colors": ["green", "black"], "objects": ["picture", "text"]},
-                                   "tags": ["fun", "Frog", "Pepe", "Cry"],
-                                   "text": "When friends don`t now Pepe",
-                                   "url": "https://i.imgflip.com/1yytwo.jpg"}
-                                  ]
+positive_data_for_authorize = [{"name": "Aladin"}, {"name": "Patric"}, {"name": "Alice"}]
+negative_data_for_authorize = [{"name": 000}, {"name": {123: "str"}}, {"name": ["robin", "jack"]}]
+positive_data_for_create_meme = {"info": {"colors": ["brown", "grey", "yellow"], "objects": ["picture", "text"]},
+                                 "tags": ["fun", "little girl", "fire", "spider"],
+                                 "text": "There was a spider. It`s gone now.",
+                                 "url": "https://encrypted-tbn0.gstatic.com/images?q=tbn"
+                                        ":ANd9GcS20iBpZlg_uZLSnBh8tVZFJvh-JPlYOZe1Hw&s"}
 
 data_for_change_meme = {"info": {"colors": ["black", "white"], "objects": ["picture", "text", "human"]},
                         "tags": ["really situation", "Nicolas"],
@@ -22,14 +17,14 @@ data_for_change_meme = {"info": {"colors": ["black", "white"], "objects": ["pict
                                "-72obmtpl7prb1.jpeg?width=894&format=pjpg&auto=webp&s"
                                "=88f9ae5932382e50c8545ef12704fa02db904209"}
 
-data_for_unused_method = {"info": {"colors": ["brown", "gold", "black"], "objects": ["picture", "text"]},
-                          "tags": ["fun", "Leonardo DiCaprio", "Django Unchained"],
+data_for_unused_method = {"info": {"colors": ["brown", "gold", "black"]},
+                          "tags": ["fun", "Leonardo DiCaprio"],
                           "text": "When people ask me. Whats your favorite meme?",
                           "url": "https://static1.srcdn.com/wordpress/wp-content/uploads/2020/08/Leonardo-DiCaprio"
                                  "-Django-Unchained-drinking-meme.jpg"
                           }
 
-negative_data_for_change_meme = [{"info": {"colors": ["brown", "gold", "black"], "objects": ["picture", "text"]},
+negative_data_for_create_meme = [{"info": {"colors": ["brown", "gold", "black"], "objects": ["picture", "text"]},
                                   "tags": ["fun", "Leonardo DiCaprio", "Django Unchained"],
                                   "text": ['When people ask me. Whats your favorite meme?'],
                                   "url": "https://static1.srcdn.com/wordpress/wp-content/uploads/2020/08/Leonardo"
@@ -40,7 +35,7 @@ negative_data_for_change_meme = [{"info": {"colors": ["brown", "gold", "black"],
                                   "url": 1243124
                                   },
                                  {"info": {"colors": ["brown", "gold", "black"], "objects": ["picture", "text"]},
-                                  "tags": {"fun", "Leonardo DiCaprio", "Django Unchained"},
+                                  "tags": {"key": ["fun", "Leonardo DiCaprio", "Django Unchained"]},
                                   "text": 'When people ask me. Whats your favorite meme?',
                                   "url": "https://static1.srcdn.com/wordpress/wp-content/uploads/2020/08/Leonardo"
                                          "-DiCaprio-Django-Unchained-drinking-meme.jpg"
@@ -124,17 +119,22 @@ def test_is_alife_a_token(check_authorize_endpoint, getting_a_token):
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.step('Create new meme')
-@pytest.mark.parametrize("data", positive_data_for_create_memes)
-def test_create_new_meme(create_post_endpoint, data):
-    create_post_endpoint.add_new_meme(payload=data)
+def test_create_new_meme(create_post_endpoint):
+    create_post_endpoint.add_new_meme(payload=positive_data_for_create_meme)
     create_post_endpoint.check_that_status_is_200()
+    create_post_endpoint.check_that_colors_is_correct(['brown', 'grey', 'yellow'])
+    create_post_endpoint.check_that_objects_is_correct(['picture', 'text'])
+    create_post_endpoint.check_that_tags_is_correct(['fun', 'little girl', 'fire', 'spider'])
+    create_post_endpoint.check_that_text_is_correct('There was a spider. It`s gone now.')
+    create_post_endpoint.check_that_url_is_correct('https://encrypted-tbn0.gstatic.com/images?q=tbn'
+                                                   ':ANd9GcS20iBpZlg_uZLSnBh8tVZFJvh-JPlYOZe1Hw&s')
 
 
 @pytest.mark.negative
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Create new meme with negative data')
-@pytest.mark.parametrize("negative_data", negative_data_for_change_meme)
+@pytest.mark.parametrize("negative_data", negative_data_for_create_meme)
 def test_create_new_meme_with_negative_data(create_post_endpoint, negative_data):
     create_post_endpoint.add_new_meme(payload=negative_data)
     create_post_endpoint.check_bad_request()
@@ -144,12 +144,19 @@ def test_create_new_meme_with_negative_data(create_post_endpoint, negative_data)
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Complete modification of object data')
-def test_change_meme_data(create_put_endpoint, getting_meme_id, getting_a_token):
+def test_change_all_meme_data(create_put_endpoint, getting_meme_id, getting_a_token):
     data_for_change_meme["id"] = getting_meme_id
     create_put_endpoint.change_all_data_meme(meme_id=getting_meme_id,
                                              payload=data_for_change_meme
                                              )
     create_put_endpoint.check_that_status_is_200()
+    create_put_endpoint.check_that_colors_is_correct(['black', 'white'])
+    create_put_endpoint.check_that_objects_is_correct(['picture', 'text', 'human'])
+    create_put_endpoint.check_that_tags_is_correct(['really situation', 'Nicolas'])
+    create_put_endpoint.check_that_text_is_correct('You don`t say?')
+    create_put_endpoint.check_that_url_is_correct('https://preview.redd.it/favorite-celebrity-memes-edits-that-never'
+                                                  '-fail-to-make-you-v0-72obmtpl7prb1.jpeg?width=894&format=pjpg&auto'
+                                                  '=webp&s=88f9ae5932382e50c8545ef12704fa02db904209')
 
 
 @pytest.mark.smoke
