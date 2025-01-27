@@ -4,7 +4,7 @@ import allure
 headers_for_unauthorized_users = {"Authorization": "false"}
 positive_data_for_authorize = {"name": "Batman"}
 authorization_data_for_delete_meme_another_user = {"name": "Joker"}
-authorization_headers_for_delete_meme_another_user = {"Authorization": "ZHlGNpcbBB0epcH"}
+headers_for_delete_meme_another_user = {"Authorization": "ZHlGNpcbBB0epcH"}
 negative_data_for_authorize = [{"name": 000}, {"name": {123: "str"}}, {"name": ["robin", "jack"]}]
 positive_data_for_create_meme = {"info": {"colors": ["brown", "grey", "yellow"], "objects": ["picture", "text"]},
                                  "tags": ["fun", "little girl", "fire", "spider"],
@@ -181,7 +181,7 @@ def test_delete_meme_by_unauthorized_user(create_delete_endpoint, getting_meme_i
     create_delete_endpoint.check_no_authorize_request()
 
 
-@pytest.mark.negative
+@pytest.mark.smoke
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Meme deletion by non-owner')
@@ -189,7 +189,7 @@ def test_delete_meme_by_another_user(create_delete_endpoint, create_post_endpoin
                                      getting_meme_id):
     create_authorize_endpoint.make_authorization(payload=authorization_data_for_delete_meme_another_user)
     create_delete_endpoint.delete_meme(meme_id=create_post_endpoint.meme_id,
-                                       headers=authorization_headers_for_delete_meme_another_user
+                                       headers=headers_for_delete_meme_another_user
                                        )
     create_delete_endpoint.check_that_status_is_forbidden_403()
 
