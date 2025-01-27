@@ -1,12 +1,13 @@
 import allure
 
 
-class Endpoit:
+class Endpoint:
     url = 'http://167.172.172.115:52355'
     response = None
     json = None
     headers = {'Content-Type': 'application/json'}
     meme_id = None
+
 
     @allure.step('Check that response is 200')
     def check_that_status_is_200(self):

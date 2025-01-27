@@ -1,9 +1,9 @@
 import requests
 import allure
-from endpoints.endpoint import Endpoit
+from endpoints.endpoint import Endpoint
 
 
-class ApiDelete(Endpoit):
+class ApiDelete(Endpoint):
 
     def __init__(self, token):
         self.token = token

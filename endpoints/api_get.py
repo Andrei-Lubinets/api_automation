@@ -1,10 +1,10 @@
 import json
 import requests
 import allure
-from endpoints.endpoint import Endpoit
+from endpoints.endpoint import Endpoint
 
 
-class ApiGet(Endpoit):
+class ApiGet(Endpoint):
     def __init__(self, token):
         self.token = token
         self.headers = {"Authorization": self.token}

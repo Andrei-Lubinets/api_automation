@@ -2,10 +2,10 @@ import json
 
 import requests
 import allure
-from endpoints.endpoint import Endpoit
+from endpoints.endpoint import Endpoint
 
 
-class ApiLifeAuthorize(Endpoit):
+class ApiLifeAuthorize(Endpoint):
     @allure.step('Checking if the token is alive')
     def token_is_alive(self, token):
         self.response = requests.get(f'{self.url}/authorize/{token}')

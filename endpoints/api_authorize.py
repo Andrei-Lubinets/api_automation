@@ -2,10 +2,10 @@ import json
 
 import requests
 import allure
-from endpoints.endpoint import Endpoit
+from endpoints.endpoint import Endpoint
 
 
-class ApiAuthorize(Endpoit):
+class ApiAuthorize(Endpoint):
     token = None
     user = None
 
