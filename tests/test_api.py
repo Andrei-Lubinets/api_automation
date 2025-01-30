@@ -60,6 +60,7 @@ negative_data_for_create_meme = [{"info": {"colors": ["brown", "gold", "black"],
 def test_make_authorization(create_authorize_endpoint):
     create_authorize_endpoint.make_authorization(payload=positive_data_for_authorize)
     create_authorize_endpoint.check_that_status_is_200()
+    create_authorize_endpoint.check_token()
     create_authorize_endpoint.check_that_user_is_correct('Batman')
 
 
@@ -90,6 +91,7 @@ def test_get_one_meme(create_get_endpoint):
     create_get_endpoint.show_one_meme()
     create_get_endpoint.check_that_status_is_200()
     create_get_endpoint.check_that_text_is_correct("Only just begun the meme war has")
+    create_get_endpoint.check_is_that_current_meme()
 
 
 @pytest.mark.negative
@@ -167,9 +169,10 @@ def test_change_all_meme_data(create_put_endpoint, getting_meme_id, getting_a_to
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Delete meme')
-def test_delete_meme(create_delete_endpoint, getting_meme_id):
+def test_delete_meme(create_delete_endpoint, getting_meme_id, create_get_endpoint):
     create_delete_endpoint.delete_meme(meme_id=getting_meme_id)
     create_delete_endpoint.check_that_status_is_200()
+    create_get_endpoint.show_current_meme(meme_id=getting_meme_id)
 
 
 @pytest.mark.smoke
