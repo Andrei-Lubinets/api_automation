@@ -56,3 +56,33 @@ class Endpoint:
     @allure.step('Check that user is the same as sent')
     def check_that_user_is_correct(self, user):
         assert self.json['user'] == user
+
+    @allure.step('Check the availability of the token')
+    def check_token(self):
+        print(self.json['token'])
+        assert self.json['token'] != ""
+
+    @allure.step('Check is that current meme')
+    def check_is_that_current_meme(self):
+        data = {"id": 1,
+                "info": {
+                    "colors": [
+                        "green",
+                        "black",
+                        "white"
+                    ],
+                    "objects": [
+                        "picture",
+                        "text"
+                    ]
+                },
+                "tags": [
+                    "fun",
+                    "yoda"
+                ],
+                "text": "Only just begun the meme war has",
+                "updated_by": "eugene",
+                "url": "https://images.theconversation.com/files/177834/original/file-20170712-14488-19lw3sc.jpg"
+                       "?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip"
+                }
+        assert data == self.response.json()
