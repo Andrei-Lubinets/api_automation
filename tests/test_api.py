@@ -88,18 +88,18 @@ def test_get_all_memes(create_get_endpoint):
 @allure.story('Manipulate with meme')
 @allure.title('Getting one meme')
 def test_get_one_meme(create_get_endpoint):
-    create_get_endpoint.show_one_meme()
+    create_get_endpoint.show_current_meme(meme_id=1)
     create_get_endpoint.check_that_status_is_200()
     create_get_endpoint.check_that_text_is_correct("Only just begun the meme war has")
-    create_get_endpoint.check_is_that_current_meme()
+    create_get_endpoint.check_is_that_current_meme(meme_id=1)
 
 
 @pytest.mark.negative
 @allure.feature('Meme')
 @allure.story('Manipulate with meme')
 @allure.title('Getting one meme by unauthorized user')
-def test_get_one_meme_by_unauthorized_user(create_get_endpoint):
-    create_get_endpoint.show_one_meme(headers=headers_for_unauthorized_users)
+def test_get_one_meme_by_unauthorized_user(create_get_endpoint, getting_meme_id):
+    create_get_endpoint.show_current_meme(meme_id=getting_meme_id, headers=headers_for_unauthorized_users)
     create_get_endpoint.check_no_authorize_request()
 
 
@@ -173,6 +173,7 @@ def test_delete_meme(create_delete_endpoint, getting_meme_id, create_get_endpoin
     create_delete_endpoint.delete_meme(meme_id=getting_meme_id)
     create_delete_endpoint.check_that_status_is_200()
     create_get_endpoint.show_current_meme(meme_id=getting_meme_id)
+    create_get_endpoint.check_status_is_not_found_404()
 
 
 @pytest.mark.smoke
