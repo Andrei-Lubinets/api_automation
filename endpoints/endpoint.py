@@ -1,4 +1,5 @@
 import allure
+import requests
 
 
 class Endpoint:
@@ -48,6 +49,11 @@ class Endpoint:
         print(f"Status code {self.response.status_code}")
         assert self.response.status_code == 403
 
+    @allure.step('Check that 404 error received')
+    def check_status_is_not_found_404(self):
+        print(f"Status code {self.response.status_code}")
+        assert self.response.status_code == 404
+
     @allure.step('Check that 405 error received')
     def check_method_not_allowed(self):
         print(f"Status code {self.response.status_code}")
@@ -63,26 +69,7 @@ class Endpoint:
         assert self.json['token'] != ""
 
     @allure.step('Check is that current meme')
-    def check_is_that_current_meme(self):
-        data = {"id": 1,
-                "info": {
-                    "colors": [
-                        "green",
-                        "black",
-                        "white"
-                    ],
-                    "objects": [
-                        "picture",
-                        "text"
-                    ]
-                },
-                "tags": [
-                    "fun",
-                    "yoda"
-                ],
-                "text": "Only just begun the meme war has",
-                "updated_by": "eugene",
-                "url": "https://images.theconversation.com/files/177834/original/file-20170712-14488-19lw3sc.jpg"
-                       "?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip"
-                }
-        assert data == self.response.json()
+    def check_is_that_current_meme(self, meme_id, headers=None):
+        headers = headers if headers else self.headers
+        assert requests.get(f'{self.url}/meme/{meme_id}', headers=headers).json() == self.response.json()
+        print(f"Requested meme with id {meme_id} received meme with id {self.response.json()['id']}")
